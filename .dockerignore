@@ -1,7 +1,1 @@
-node_modules
-build
 .git
-.gitignore
-Dockerfile
-docker-compose.yml
-*.sh
