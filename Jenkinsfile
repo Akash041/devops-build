@@ -1,40 +1,44 @@
 pipeline {
     agent any
+
+    environment {
+        DOCKER_HUB_USER = "akashadmin07"
+        IMAGE_NAME = "react-app"
+    }
+
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                git branch: 'dev', url: 'https://github.com/Akash041/devops-build.git'
+                git branch: "${env.BRANCH_NAME}", url: 'https://github.com/Akash041/devops-build.git'
             }
         }
-        stage('Build') {
+
+        stage('Build Docker Image') {
             steps {
+                sh 'chmod +x build.sh'
                 sh './build.sh'
             }
         }
-        stage('Push Dev Image') {
-            when {
-                branch 'dev'
-            }
+
+        stage('Tag and Push Image') {
             steps {
-                sh 'docker push akashadmin07/react-app-dev'
+                script {
+                    def tagName = (env.BRANCH_NAME == 'main') ? 'react-app-prod' : 'react-app-dev'
+                    def fullImage = "${DOCKER_HUB_USER}/${tagName}:latest"
+
+                    sh """
+                    docker tag ${IMAGE_NAME} ${fullImage}
+                    docker push ${fullImage}
+                    """
+                }
             }
         }
-        stage('Push Prod Image') {
-            when {
-                branch 'main'
-            }
+
+        stage('Deploy Container') {
             steps {
-                sh '''
-                docker tag react-app akashadmin07/react-app-prod 
-                docker push akashadmin07/react-app-prod
-                '''
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh './deploy.sh'
+                sh 'chmod +x deploy.sh'
+                sh "export BRANCH_NAME=${env.BRANCH_NAME} && ./deploy.sh"
             }
         }
     }
 }
-
