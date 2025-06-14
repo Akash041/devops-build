@@ -13,9 +13,8 @@ echo "Using image: $IMAGE"
 
 CONTAINER_NAME="react-container"
 
-# Stop and remove existing container (if not using compose down)
-docker-compose down || true
+docker rm -f react-container 2>/dev/null || true
 
 # Run new container
 echo "Running new container from image: $IMAGE"
-IMAGE=$IMAGE docker-compose up -d --force-recreate
+IMAGE=$IMAGE docker-compose up -d 
