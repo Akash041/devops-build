@@ -1,3 +1,5 @@
 #!/bin/bash
-docker build -t akashadmin07/react-app-dev .
+set -e
+
+docker build -t react-app .
 
