@@ -24,6 +24,7 @@ pipeline {
             steps {
                 script {
                     def tagName = (env.BRANCH_NAME == 'main') ? 'react-app-prod' : 'react-app-dev'
+                    echo "Tagging image as: ${tagName}"
                     def fullImage = "${DOCKER_HUB_USER}/${tagName}:latest"
 
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
