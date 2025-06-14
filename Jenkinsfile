@@ -26,10 +26,14 @@ pipeline {
                     def tagName = (env.BRANCH_NAME == 'main') ? 'react-app-prod' : 'react-app-dev'
                     def fullImage = "${DOCKER_HUB_USER}/${tagName}:latest"
 
-                    sh """
-                    docker tag ${IMAGE_NAME} ${fullImage}
-                    docker push ${fullImage}
-                    """
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker tag ${IMAGE_NAME} ${fullImage}
+                        docker push ${fullImage}
+                        docker logout
+                        """
+                    }
                 }
             }
         }
