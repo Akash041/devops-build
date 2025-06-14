@@ -1,3 +1,3 @@
 #!/bin/bash
-docker build -t yourdockerhub/react-app:dev .
+docker build -t akashadmin07/react-app-dev .
 
