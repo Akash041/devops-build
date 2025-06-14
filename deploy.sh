@@ -9,6 +9,8 @@ else
     IMAGE="akashadmin07/react-app-dev:latest"
 fi
 
+echo "Using image: $IMAGE"
+
 CONTAINER_NAME="react-container"
 
 # Stop and remove container only if it exists
