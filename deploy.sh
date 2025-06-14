@@ -1,16 +1,23 @@
 #!/bin/bash
 set -e
 
-if [ "$BRANCH_NAME" == "main" ]; then
+BRANCH_NAME=${BRANCH_NAME:-dev}
+
+if [ "$BRANCH_NAME" = "main" ]; then
     IMAGE="akashadmin07/react-app-prod:latest"
 else
     IMAGE="akashadmin07/react-app-dev:latest"
 fi
 
-# Remove previous container if running
-docker rm -f react-container || true
+CONTAINER_NAME="react-container"
 
-# Run the new container
-docker run -d -p 80:80 --name react-container $IMAGE
+# Stop and remove container only if it exists
+if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
+    echo "Stopping and removing existing container: $CONTAINER_NAME"
+    docker stop $CONTAINER_NAME || true
+    docker rm $CONTAINER_NAME || true
+fi
 
-
+# Run new container
+echo "Running new container from image: $IMAGE"
+docker run -d --name $CONTAINER_NAME -p 80:80 $IMAGE
