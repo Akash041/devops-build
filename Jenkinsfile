@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Push Prod Image') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh '''
