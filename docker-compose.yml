@@ -1,0 +1,7 @@
+version: '3'
+services:
+  react-app:
+    image: ${IMAGE}
+    container_name: react-container
+    ports:
+      - "80:80"

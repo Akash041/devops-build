@@ -22,4 +22,4 @@ fi
 
 # Run new container
 echo "Running new container from image: $IMAGE"
-docker run -d --name $CONTAINER_NAME -p 80:80 $IMAGE
+IMAGE=$IMAGE docker-compose up -d --force-recreate
