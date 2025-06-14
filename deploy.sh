@@ -13,12 +13,8 @@ echo "Using image: $IMAGE"
 
 CONTAINER_NAME="react-container"
 
-# Stop and remove container only if it exists
-if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
-    echo "Stopping and removing existing container: $CONTAINER_NAME"
-    docker stop $CONTAINER_NAME || true
-    docker rm $CONTAINER_NAME || true
-fi
+# Stop and remove existing container (if not using compose down)
+docker-compose down || true
 
 # Run new container
 echo "Running new container from image: $IMAGE"
